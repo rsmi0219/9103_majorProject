@@ -3,11 +3,6 @@ let circles = []; // Array for big circles
 let bgCircles = []; // Array for all the small background circles
 let bgCircleAmount = 400; 
 
-// I used this tutorial to learn how to adjust colours:
-// https://happycoding.io/tutorials/p5js/images/image-palette
-
-let palette;
-
 // arrays for the X and Y coordinates for the orange lines
 let wavylineX = [2.8, 8.9, 14.9, 0.7, 6.8, 12.7, 19.2, -0.3, 5.8, 11.5, 17.4, 4.3, 10, 16];
 let wavylineY = [2.7, 1, 0, 8.9, 7.7, 6.8, 4.2, 15.2, 13.5, 12.8, 10.5, 19.5, 18.5, 17];
@@ -61,7 +56,7 @@ class BgCirclePattern {
     this.yPos = yPos;
     this.radius = radius;
     this.color = color(random(255), random(255), random(255)); 
-    // These colours are not connected to the palette function now
+    // These colours can still be animated
   }
 
   display() {
@@ -80,13 +75,8 @@ class CirclePattern {
     this.yFactor = yFactor;
     this.smallCircles = this.generateRandomSmallCircles();
     this.colour = color;
-    this.nestedCircleColors = []; // Array to store random colors for nested circles
-
-    // Generate random colors for nested circles
-    for (let i = 0; i < 5; i++) {
-      this.nestedCircleColors.push([random(255), random(255), random(255)]);
+  
   }
-}
 
   display() {
     fill(this.colour);
@@ -112,9 +102,11 @@ class CirclePattern {
     this.color = getPaletteColor([random(255), random(255), random(255)]);
   }
 
+  //to stop the nested circles from being drawn with different colours all the time,
+  //I eventually drew them all with a set colour
   drawNestedCircles(x, y) {
     let r2 = windowHeight / 20 * 1.5;
-    fill(this.nestedCircleColors[0]); // Use stored color for the first nested circle
+    fill(255,0,255); // Use stored color for the first nested circle
     circle(x, y, r2 * 2);
 
     let r3 = windowHeight / 20 * 1.35;
@@ -122,16 +114,28 @@ class CirclePattern {
     circle(x, y, r3 * 2);
 
     let r4 = windowHeight / 20 * 0.5;
-    let ringRadii = [
-      windowHeight / 20 * 1.2,
-      windowHeight / 20 * 1.0,
-      windowHeight / 20 * 0.8,
-      windowHeight / 20 * 0.6,
-      windowHeight / 20 * 0.4
-    ];
-    for (let i = 0; i < ringRadii.length; i++) {
-      fill(([random(255), random(255), random(255)]));
-      circle(x, y, ringRadii[i] * 2);
+    fill(255,255,255); // Use stored color for the first nested circle
+    circle(x, y, r4 * 2);
+
+    let r5 = windowHeight / 20 * 1.2;
+    fill(([random(255), random(255), random(255)]));
+    circle(x, y, r5 * 2);
+
+    let r6 = windowHeight / 20 * 1.0;
+    fill(([random(255), random(255), random(255)]));
+    circle(x, y, r6 * 2);
+
+    let r7 = windowHeight / 20 * 0.8;
+    fill(([random(255), random(255), random(255)]));
+    circle(x, y, r7 * 2);
+
+    let r8 = windowHeight / 20 * 0.6;
+    fill(([random(255), random(255), random(255)]));
+    circle(x, y, r8 * 2);
+
+    let r9 = windowHeight / 20 * 0.4;
+    fill(([random(255), random(255), random(255)]));
+    circle(x, y, r9 * 2);
     }
   }
 
@@ -206,6 +210,9 @@ function setup() {
   background(5, 89, 127);
   circleDiameter = (windowHeight / 20) * 5.5;
 
+  
+  //for creating an array with colours this tutorial was inspiration:
+  //https://happycoding.io/tutorials/p5js/images/image-palette
   palette = [
     color(255, 0, 0),
     color(0, 255, 0),
