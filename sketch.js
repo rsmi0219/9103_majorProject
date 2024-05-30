@@ -97,7 +97,7 @@ class CirclePattern {
     return d < this.radius;
   }
 
-  //If it is clicked the colour changes to one of the palette colours
+  //Function for if it is clicked the colour changes to one of the palette colours
   changeColor() {
     this.color = getPaletteColor([random(255), random(255), random(255)]);
   }
@@ -110,7 +110,7 @@ class CirclePattern {
     circle(x, y, r2 * 2);
 
     let r3 = windowHeight / 20 * 1.35;
-    fill(([random(255), random(255), random(255)])); 
+    fill(([random(255), random(255), random(255)])); // I want this to change colours randomly
     circle(x, y, r3 * 2);
 
     let r4 = windowHeight / 20 * 0.5;
@@ -126,7 +126,7 @@ class CirclePattern {
     circle(x, y, r6 * 2);
 
     let r7 = windowHeight / 20 * 0.8;
-    fill(([random(255), random(255), random(255)]));
+    fill(([random(255), random(255), random(255)])); // I want this to change colours randomly
     circle(x, y, r7 * 2);
 
     let r8 = windowHeight / 20 * 0.6;
@@ -134,10 +134,12 @@ class CirclePattern {
     circle(x, y, r8 * 2);
 
     let r9 = windowHeight / 20 * 0.4;
-    fill(([random(255), random(255), random(255)]));
+    fill(([random(255), random(255), random(255)])); // I want the innercircle to change colours randomly
     circle(x, y, r9 * 2);
     }
 
+    // these are the randomcircles within the big circles that are only drawn
+    //if they are in the bigger circle
   generateRandomSmallCircles() {
     let smallCircles = [];
     let x = this.xFactor * windowHeight / 20;
@@ -152,7 +154,8 @@ class CirclePattern {
       let distance = random(radius - smallCircleDiameter / 2);
       let randX = x + distance * cos(angle);
       let randY = y + distance * sin(angle);
-      let randColor = color(random(255), random(255), random(255));
+      //the tiny circles have random colours, I will leave those the same for balance in the image
+      let randColor = color(random(255), random(255), random(255)); 
       let newCircle = { x: randX, y: randY, color: randColor };
 
       if (this.isValidPosition(newCircle, smallCircles, smallCircleDiameter)) {
@@ -165,6 +168,7 @@ class CirclePattern {
     return smallCircles;
   }
 
+  //draw if it is true that they are inside big circle
   isValidPosition(newCircle, smallCircles, diameter) {
     for (let circle of smallCircles) {
       let distance = dist(newCircle.x, newCircle.y, circle.x, circle.y);
@@ -175,6 +179,7 @@ class CirclePattern {
     return true;
   }
 
+  // draw these tiny random circles
   drawRandomSmallCircles() {
     let smallCircleDiameter = 10;
     noStroke();
@@ -192,6 +197,8 @@ class CirclePattern {
     return this.yFactor * windowHeight / 20;
   }
 
+  //This is the function for changing the big circles if they are clicked
+  //Check first which circle is clicked
   isClicked(mx, my) {
     let x = this.getX();
     let y = this.getY();
@@ -199,6 +206,7 @@ class CirclePattern {
     return d < circleDiameter / 2;
   }
 
+  //then change a clicked circle to a colour from my chosen colourpalette
   changeColor() {
     this.colour = getPaletteColor([random(255), random(255), random(255)]);
   }
@@ -227,6 +235,7 @@ function setup() {
     circles.push(new CirclePattern(wavylineX[i], wavylineY[i], circleColors[i]));
   }
 
+  //background circles do not overlap each other
   for (let i = 0; i < bgCircleAmount; i++) {
     let overlapping = true;
     let bgCircle;
@@ -240,6 +249,8 @@ function setup() {
           break;
         }
       }
+
+      //background Circles do not overlap the big Circles
       for (let bigCircle of circles) {
         let d = dist(bgCircle.xPos, bgCircle.yPos, bigCircle.getX(), bigCircle.getY());
         if (d < bgCircle.radius + circleDiameter / 2 + 15) {
@@ -255,23 +266,30 @@ function setup() {
 function draw() {
   background(5, 89, 127);
 
+  //draw the lines
+
   for (let t = 0; t < wavylineX.length; t++) {
     wavyLines(wavylineX[t], wavylineY[t], 5, 244, 198, 226);
   }
 
+   //draw the lines
   for (let t = 0; t < wavylineX.length; t++) {
     wavyLines(wavylineX[t], wavylineY[t], 2, 134, 198, 226);
   }
 
+   //draw the background circles
   for (let bgCircle of bgCircles) {
     bgCircle.display();
   }
 
+  // draw the big circles
   for (let circle of circles) {
     circle.display();
   }
 }
 
+
+//This is the function for my colour palette
 function getPaletteColor(circleColors) {
   const imgR = red(circleColors);
   const imgG = green(circleColors);
@@ -296,6 +314,7 @@ function getPaletteColor(circleColors) {
   return targetColor;
 }
 
+//The function mousepressed for colour changing from the big circles
 function mousePressed() {
   for (let circle of circles) {
     if (circle.isClicked(mouseX, mouseY)) {
@@ -309,6 +328,8 @@ function mousePressed() {
     }
   }
 }
+
+//Lastly resize the canvas only to windowHeight to keep the artwork squared
 
 function windowResized() {
   resizeCanvas(windowHeight, windowHeight);
