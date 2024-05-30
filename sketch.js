@@ -3,8 +3,6 @@ let circles = []; // Array for big circles
 let bgCircles = []; // Array for all the small background circles
 let bgCircleAmount = 400; 
 
-frameRate(30);
-
 // arrays for the X and Y coordinates for the orange lines
 let wavylineX = [2.8, 8.9, 14.9, 0.7, 6.8, 12.7, 19.2, -0.3, 5.8, 11.5, 17.4, 4.3, 10, 16];
 let wavylineY = [2.7, 1, 0, 8.9, 7.7, 6.8, 4.2, 15.2, 13.5, 12.8, 10.5, 19.5, 18.5, 17];
@@ -112,7 +110,7 @@ class CirclePattern {
     circle(x, y, r2 * 2);
 
     let r3 = windowHeight / 20 * 1.35;
-    fill(255,255,255); 
+    fill(([random(255), random(255), random(255)])); 
     circle(x, y, r3 * 2);
 
     let r4 = windowHeight / 20 * 0.5;
@@ -128,7 +126,7 @@ class CirclePattern {
     circle(x, y, r6 * 2);
 
     let r7 = windowHeight / 20 * 0.8;
-    fill(0,0,0);
+    fill(([random(255), random(255), random(255)]));
     circle(x, y, r7 * 2);
 
     let r8 = windowHeight / 20 * 0.6;
@@ -136,7 +134,7 @@ class CirclePattern {
     circle(x, y, r8 * 2);
 
     let r9 = windowHeight / 20 * 0.4;
-    fill(0,0,0);
+    fill(([random(255), random(255), random(255)]));
     circle(x, y, r9 * 2);
     }
 
@@ -211,6 +209,9 @@ function setup() {
   background(5, 89, 127);
   circleDiameter = (windowHeight / 20) * 5.5;
 
+    // Set the frameRate lower to have colours changing slower
+  //Framerate derived from https://p5js.org/reference/#/p5/frameRate 
+  frameRate(5);
   
   //for creating an array with colours this tutorial was inspiration:
   //https://happycoding.io/tutorials/p5js/images/image-palette
