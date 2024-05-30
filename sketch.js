@@ -3,6 +3,11 @@ let circles = []; // Array for big circles
 let bgCircles = []; // Array for all the small background circles
 let bgCircleAmount = 400; 
 
+//I used this tutorial to learn how to adjust colours:
+//https://happycoding.io/tutorials/p5js/images/image-palette
+
+let palette;
+
 // arrays for the X and Y coordinates for the orange lines
 let wavylineX = [2.8, 8.9, 14.9, 0.7, 6.8, 12.7, 19.2, -0.3, 5.8, 11.5, 17.4, 4.3, 10, 16];
 let wavylineY = [2.7, 1, 0, 8.9, 7.7, 6.8, 4.2, 15.2, 13.5, 12.8, 10.5, 19.5, 18.5, 17];
@@ -72,7 +77,9 @@ class CirclePattern {
     this.yFactor = yFactor;
     this.smallCircles = this.generateRandomSmallCircles();
     this.colour = color;
-    // Generate random colors for nested circles
+    this.colour = getPaletteColor(color); // Use the getPaletteColor function to set the color
+
+    // Generate random colors for nested circlesto start with
     this.r2Color = [random(0, 255), random(0, 255), random(0, 255)];
     this.r3Color = [random(0, 255), random(0, 255), random(0, 255)];
     this.r4Color = [random(0, 255), random(0, 255), random(0, 255)];
@@ -182,6 +189,19 @@ function setup() {
   background(5, 89, 127);
   circleDiameter = (windowHeight / 20) * 5.5;
 
+  //the palette is defined before the circles are created
+  //I setup a colour palette with an Array with RGB colours.
+  //Here in palette you can add all colours you want to see drawn 
+  //by the fuction getPaletteColor
+  palette=[
+    color(255,0,0),
+    color(0,255,0),
+    color(0,0,255),
+    color(0),
+    color(255)
+  ];
+
+
   // Initialize circles with their respective positions and colors
   for (let i = 0; i < wavylineX.length; i++) {
     circles.push(new CirclePattern(wavylineX[i], wavylineY[i], circleColors[i]));
@@ -215,6 +235,8 @@ function setup() {
     }
     bgCircles.push(bgCircle);
   }
+
+
 }
 
 function draw() {
@@ -239,6 +261,33 @@ function draw() {
   for (let circle of circles) {
     circle.display();
   }
+}
+
+function getPaletteColor(circleColors) {
+  const imgR = red(circleColors);
+  const imgG = green(circleColors);
+  const imgB = blue(circleColors);
+
+  //we just pick a very high number because we want to determine the distance
+  let minDistance = 999999;
+  let targetColor;
+
+  for (const c of palette) {
+    const paletteR = red(c);
+    const paletteG = green(c);
+    const paletteB = blue(c);
+
+    const colorDistance =
+      dist(imgR, imgG, imgB,
+           paletteR, paletteG, paletteB);
+
+    if (colorDistance < minDistance) {
+      targetColor = c;
+      minDistance = colorDistance;
+    }
+  }
+
+  return targetColor;
 }
 
 function windowResized() {
