@@ -3,8 +3,8 @@ let circles = []; // Array for big circles
 let bgCircles = []; // Array for all the small background circles
 let bgCircleAmount = 400; 
 
-//I used this tutorial to learn how to adjust colours:
-//https://happycoding.io/tutorials/p5js/images/image-palette
+// I used this tutorial to learn how to adjust colours:
+// https://happycoding.io/tutorials/p5js/images/image-palette
 
 let palette;
 
@@ -13,8 +13,7 @@ let wavylineX = [2.8, 8.9, 14.9, 0.7, 6.8, 12.7, 19.2, -0.3, 5.8, 11.5, 17.4, 4.
 let wavylineY = [2.7, 1, 0, 8.9, 7.7, 6.8, 4.2, 15.2, 13.5, 12.8, 10.5, 19.5, 18.5, 17];
 
 
-
-// Predefined colors for the big circles
+//These are the colours as in the original artwork
 let circleColors = [
   [210, 266, 248],
   [250, 181, 37],
@@ -32,7 +31,7 @@ let circleColors = [
   [253, 220, 62]
 ];
 
-// function to create the lines in the background, adapted from https://editor.p5js.org/zygugi/sketches/BJHK3O_yM
+//Draw all the wavy lines
 function wavyLines(linesX, linesY, lineWeight, lineR, lineG, lineB) {
   noFill();
   stroke(lineR, lineG, lineB);
@@ -61,34 +60,18 @@ class BgCirclePattern {
     this.xPos = xPos;
     this.yPos = yPos;
     this.radius = radius;
-    //still a random color, but now also adjusted by the PaletteColor function
-    this.color = getPaletteColor([random(255), random(255), random(255)]); 
+    this.color = color(random(255), random(255), random(255)); 
+    // These colours are not connected to the palette function now
   }
 
   display() {
-    fill(this.color); //also fill the small dots with getPaletteColor
+    fill(this.color);
     noStroke();
     circle(this.xPos, this.yPos, this.radius * 2);
   }
 
-  isClicked(x, y) {
-    let circleX = this.getX();
-    let circleY = this.getY();
-    let d = dist(x, y, circleX, circleY);
-    return d < circleDiameter / 2;
-  }
-
-  changeColor() {
-    this.colour = getPaletteColor([random(0, 255), random(0, 255), random(0, 255)]);
-    this.r2Color = getPaletteColor([random(0, 255), random(0, 255), random(0, 255)]);
-    this.r3Color = getPaletteColor([random(0, 255), random(0, 255), random(0, 255)]);
-    this.r4Color = getPaletteColor([random(0, 255), random(0, 255), random(0, 255)]);
-
-    for (let i = 0; i < 5; i++) {
-      this.additionalRingColors[i] = getPaletteColor([random(0, 255), random(0, 255), random(0, 255)]);
-    }
-  }
 }
+
 
 // Class for the biggest Circle Pattern
 class CirclePattern {
@@ -97,20 +80,13 @@ class CirclePattern {
     this.yFactor = yFactor;
     this.smallCircles = this.generateRandomSmallCircles();
     this.colour = color;
-    this.colour = getPaletteColor(color); // Use the getPaletteColor function to set the color
+    this.nestedCircleColors = []; // Array to store random colors for nested circles
 
-    // Generate random colors for nested circlesto start with
-    this.r2Color = getPaletteColor([random(0, 255), random(0, 255), random(0, 255)]);
-    this.r3Color = getPaletteColor([random(0, 255), random(0, 255), random(0, 255)]);
-    this.r4Color = getPaletteColor([random(0, 255), random(0, 255), random(0, 255)]);
-
-    // Generate random colors for additional rings
-    this.additionalRingColors = []; // Array for storing colors
+    // Generate random colors for nested circles
     for (let i = 0; i < 5; i++) {
-    //also with palette color
-      this.additionalRingColors.push(getPaletteColor([random(0, 255), random(0, 255), random(0, 255)]));
-    }
+      this.nestedCircleColors.push([random(255), random(255), random(255)]);
   }
+}
 
   display() {
     fill(this.colour);
@@ -118,26 +94,35 @@ class CirclePattern {
     let y = this.yFactor * windowHeight / 20;
     circle(x, y, circleDiameter);
 
-    // draw random small circles
     this.drawRandomSmallCircles();
-
-    // draw nested circles
     this.drawNestedCircles(x, y);
   }
 
+  //Now we add a click function for if a Big circle is clicked
+  //I used the coding train video for this code:
+  // https://www.youtube.com/watch?v=DEHsr4XicN8&lc=Ugg7r6_9i0CEnHgCoAEC&ab_channel=TheCodingTrain
+
+  isClicked(mx, my) {
+    let d = dist(mx, my, this.xPos, this.yPos);
+    return d < this.radius;
+  }
+
+  //If it is clicked the colour changes to one of the palette colours
+  changeColor() {
+    this.color = getPaletteColor([random(255), random(255), random(255)]);
+  }
+
   drawNestedCircles(x, y) {
-    // second circle
     let r2 = windowHeight / 20 * 1.5;
-    fill(this.r2Color);
+    fill(this.nestedCircleColors[0]); // Use stored color for the first nested circle
     circle(x, y, r2 * 2);
 
     let r3 = windowHeight / 20 * 1.35;
-    fill(this.r3Color);
+    fill(255,255,255); // Use stored color for the first nested circle
     circle(x, y, r3 * 2);
 
-    // Additional rings between r3 and r4
     let r4 = windowHeight / 20 * 0.5;
-    let ringRadii = [ // Radius of each circle between first circle 3 and circle 4
+    let ringRadii = [
       windowHeight / 20 * 1.2,
       windowHeight / 20 * 1.0,
       windowHeight / 20 * 0.8,
@@ -145,7 +130,7 @@ class CirclePattern {
       windowHeight / 20 * 0.4
     ];
     for (let i = 0; i < ringRadii.length; i++) {
-      fill(this.additionalRingColors[i]); // Achieve different color fills by calling the data in the array
+      fill(([random(255), random(255), random(255)]));
       circle(x, y, ringRadii[i] * 2);
     }
   }
@@ -155,7 +140,7 @@ class CirclePattern {
     let x = this.xFactor * windowHeight / 20;
     let y = this.yFactor * windowHeight / 20;
     let radius = circleDiameter / 2;
-    let smallCircleDiameter = 10; // Smaller diameter
+    let smallCircleDiameter = 10;
     let maxAttempts = 10000;
     let attempts = 0;
 
@@ -188,8 +173,8 @@ class CirclePattern {
   }
 
   drawRandomSmallCircles() {
-    let smallCircleDiameter = 10; // Smaller size of small circles
-    noStroke(); // Remove stroke
+    let smallCircleDiameter = 10;
+    noStroke();
     for (let smallCircle of this.smallCircles) {
       fill(smallCircle.color);
       circle(smallCircle.x, smallCircle.y, smallCircleDiameter);
@@ -203,6 +188,17 @@ class CirclePattern {
   getY() {
     return this.yFactor * windowHeight / 20;
   }
+
+  isClicked(mx, my) {
+    let x = this.getX();
+    let y = this.getY();
+    let d = dist(mx, my, x, y);
+    return d < circleDiameter / 2;
+  }
+
+  changeColor() {
+    this.colour = getPaletteColor([random(255), random(255), random(255)]);
+  }
 }
 
 function setup() {
@@ -210,37 +206,24 @@ function setup() {
   background(5, 89, 127);
   circleDiameter = (windowHeight / 20) * 5.5;
 
-  //the palette is defined before the circles are created
-
-  //I setup a colour palette with an Array with RGB colours
-  //Here in palette you can add all colours you want to see drawn 
-  //by the fuction getPaletteColor
-
-  palette=[
-    color(255,0,0),
-    color(0,255,0),
-    color(0,0,255),
+  palette = [
+    color(255, 0, 0),
+    color(0, 255, 0),
+    color(0, 0, 255),
     color(0),
     color(255)
   ];
 
-  //Now the colors above devide the big circles in R,G,B, black & white
-
-  // Initialize circles with their respective positions and colors
   for (let i = 0; i < wavylineX.length; i++) {
     circles.push(new CirclePattern(wavylineX[i], wavylineY[i], circleColors[i]));
   }
 
-  // Create small background circles
   for (let i = 0; i < bgCircleAmount; i++) {
     let overlapping = true;
     let bgCircle;
     while (overlapping) {
       overlapping = false;
-      //I want the smallest circle to be at least 1, not 0
       bgCircle = new BgCirclePattern(random(width), random(height), random(1, 10));
-
-      // Check for overlap with other small background circles
       for (let other of bgCircles) {
         let d = dist(bgCircle.xPos, bgCircle.yPos, other.xPos, other.yPos);
         if (d < bgCircle.radius + other.radius) {
@@ -248,8 +231,6 @@ function setup() {
           break;
         }
       }
-
-      // Check for overlap with big circles
       for (let bigCircle of circles) {
         let d = dist(bgCircle.xPos, bgCircle.yPos, bigCircle.getX(), bigCircle.getY());
         if (d < bgCircle.radius + circleDiameter / 2 + 15) {
@@ -260,29 +241,23 @@ function setup() {
     }
     bgCircles.push(bgCircle);
   }
-
-
 }
 
 function draw() {
   background(5, 89, 127);
 
-  // draw lines with a certain lineweight and colour
   for (let t = 0; t < wavylineX.length; t++) {
     wavyLines(wavylineX[t], wavylineY[t], 5, 244, 198, 226);
   }
 
-  // draw inner lines with a certain lineweight and colour
   for (let t = 0; t < wavylineX.length; t++) {
     wavyLines(wavylineX[t], wavylineY[t], 2, 134, 198, 226);
   }
 
-  // Draw all small background circles
   for (let bgCircle of bgCircles) {
     bgCircle.display();
   }
 
-  // Draw all big circles
   for (let circle of circles) {
     circle.display();
   }
@@ -293,7 +268,6 @@ function getPaletteColor(circleColors) {
   const imgG = green(circleColors);
   const imgB = blue(circleColors);
 
-  //we just pick a very high number because we want to determine the distance
   let minDistance = 999999;
   let targetColor;
 
@@ -302,9 +276,7 @@ function getPaletteColor(circleColors) {
     const paletteG = green(c);
     const paletteB = blue(c);
 
-    const colorDistance =
-      dist(imgR, imgG, imgB,
-           paletteR, paletteG, paletteB);
+    const colorDistance = dist(imgR, imgG, imgB, paletteR, paletteG, paletteB);
 
     if (colorDistance < minDistance) {
       targetColor = c;
@@ -315,8 +287,6 @@ function getPaletteColor(circleColors) {
   return targetColor;
 }
 
-//we use a mousePressed function to be able to click on the colours
-
 function mousePressed() {
   for (let circle of circles) {
     if (circle.isClicked(mouseX, mouseY)) {
@@ -324,10 +294,15 @@ function mousePressed() {
     }
   }
 
+  for (let bgCircle of bgCircles) {
+    if (bgCircle.isClicked(mouseX, mouseY)) {
+      bgCircle.changeColor();
+    }
+  }
 }
 
 function windowResized() {
   resizeCanvas(windowHeight, windowHeight);
-  circleDiameter = (windowHeight / 20) * 5.5; // Recalculate circleDiameter after resize
-  draw(); // Redraw circles to reflect the new dimensions
+  circleDiameter = (windowHeight / 20) * 5.5;
+  draw();
 }
