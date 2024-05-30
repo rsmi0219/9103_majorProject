@@ -61,13 +61,32 @@ class BgCirclePattern {
     this.xPos = xPos;
     this.yPos = yPos;
     this.radius = radius;
-    this.colour = getPaletteColor(color);
+    //still a random color, but now also adjusted by the PaletteColor function
+    this.color = getPaletteColor([random(255), random(255), random(255)]); 
   }
 
   display() {
-    fill(230, 101, 18);
+    fill(this.color); //also fill the small dots with getPaletteColor
     noStroke();
     circle(this.xPos, this.yPos, this.radius * 2);
+  }
+
+  isClicked(x, y) {
+    let circleX = this.getX();
+    let circleY = this.getY();
+    let d = dist(x, y, circleX, circleY);
+    return d < circleDiameter / 2;
+  }
+
+  changeColor() {
+    this.colour = getPaletteColor([random(0, 255), random(0, 255), random(0, 255)]);
+    this.r2Color = getPaletteColor([random(0, 255), random(0, 255), random(0, 255)]);
+    this.r3Color = getPaletteColor([random(0, 255), random(0, 255), random(0, 255)]);
+    this.r4Color = getPaletteColor([random(0, 255), random(0, 255), random(0, 255)]);
+
+    for (let i = 0; i < 5; i++) {
+      this.additionalRingColors[i] = getPaletteColor([random(0, 255), random(0, 255), random(0, 255)]);
+    }
   }
 }
 
@@ -81,14 +100,15 @@ class CirclePattern {
     this.colour = getPaletteColor(color); // Use the getPaletteColor function to set the color
 
     // Generate random colors for nested circlesto start with
-    this.r2Color = [random(0, 255), random(0, 255), random(0, 255)];
-    this.r3Color = [random(0, 255), random(0, 255), random(0, 255)];
-    this.r4Color = [random(0, 255), random(0, 255), random(0, 255)];
+    this.r2Color = getPaletteColor([random(0, 255), random(0, 255), random(0, 255)]);
+    this.r3Color = getPaletteColor([random(0, 255), random(0, 255), random(0, 255)]);
+    this.r4Color = getPaletteColor([random(0, 255), random(0, 255), random(0, 255)]);
 
     // Generate random colors for additional rings
     this.additionalRingColors = []; // Array for storing colors
     for (let i = 0; i < 5; i++) {
-      this.additionalRingColors.push([random(0, 255), random(0, 255), random(0, 255)]);
+    //also with palette color
+      this.additionalRingColors.push(getPaletteColor([random(0, 255), random(0, 255), random(0, 255)]));
     }
   }
 
@@ -217,7 +237,8 @@ function setup() {
     let bgCircle;
     while (overlapping) {
       overlapping = false;
-      bgCircle = new BgCirclePattern(random(width), random(height), random(0, 10));
+      //I want the smallest circle to be at least 1, not 0
+      bgCircle = new BgCirclePattern(random(width), random(height), random(1, 10));
 
       // Check for overlap with other small background circles
       for (let other of bgCircles) {
@@ -292,6 +313,17 @@ function getPaletteColor(circleColors) {
   }
 
   return targetColor;
+}
+
+//we use a mousePressed function to be able to click on the colours
+
+function mousePressed() {
+  for (let circle of circles) {
+    if (circle.isClicked(mouseX, mouseY)) {
+      circle.changeColor();
+    }
+  }
+
 }
 
 function windowResized() {
