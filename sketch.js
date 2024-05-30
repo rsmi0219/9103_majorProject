@@ -61,6 +61,7 @@ class BgCirclePattern {
     this.xPos = xPos;
     this.yPos = yPos;
     this.radius = radius;
+    this.colour = getPaletteColor(color);
   }
 
   display() {
@@ -190,9 +191,11 @@ function setup() {
   circleDiameter = (windowHeight / 20) * 5.5;
 
   //the palette is defined before the circles are created
-  //I setup a colour palette with an Array with RGB colours.
+
+  //I setup a colour palette with an Array with RGB colours
   //Here in palette you can add all colours you want to see drawn 
   //by the fuction getPaletteColor
+
   palette=[
     color(255,0,0),
     color(0,255,0),
@@ -201,6 +204,7 @@ function setup() {
     color(255)
   ];
 
+  //Now the colors above devide the big circles in R,G,B, black & white
 
   // Initialize circles with their respective positions and colors
   for (let i = 0; i < wavylineX.length; i++) {
