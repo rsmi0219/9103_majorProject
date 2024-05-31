@@ -55,8 +55,18 @@ class BgCirclePattern {
     this.xPos = xPos;
     this.yPos = yPos;
     this.radius = radius;
-    this.color = color(random(255), random(255), random(255)); 
-    // These colours can still be animated
+    this.color = color(30, 100, 100) // radom hue value for the colors using HSB, rest is set (changed later in code)
+    // These colours are not animated, but different every time
+  }
+
+  update () {
+    // Adjust the colours of the small background circles
+      //with the mouse position to change them when hovering over the screen
+      // Map mouseX to a range between 0 and 360 for the hue
+  
+      let hue = map(mouseX, 0, windowWidth, 0, 360);
+      // Update the colour with the new hue value
+      this.color = color(hue, 10, 200); // Keeping saturation and brightness constant
   }
 
   display() {
@@ -102,8 +112,9 @@ class CirclePattern {
     this.color = getPaletteColor([random(255), random(255), random(255)]);
   }
 
-  //to stop the nested circles from being drawn with different colours all the time,
-  //I eventually drew them all with a set colour
+  //I changed the array here to each individual circle to be able to choose which circle I wanted animated
+  // & made the other circles white and black for contrast and a bit more tranquility in the whole piece.
+
   drawNestedCircles(x, y) {
     let r2 = windowHeight / 20 * 1.5;
     fill(255,255,255); 
@@ -145,7 +156,7 @@ class CirclePattern {
     let x = this.xFactor * windowHeight / 20;
     let y = this.yFactor * windowHeight / 20;
     let radius = circleDiameter / 2;
-    let smallCircleDiameter = 10;
+    let smallCircleDiameter = windowHeight/90;
     let maxAttempts = 10000;
     let attempts = 0;
 
@@ -265,7 +276,7 @@ function setup() {
 
 function draw() {
   background(5, 89, 127);
-
+    
   //draw the lines
 
   for (let t = 0; t < wavylineX.length; t++) {
@@ -279,6 +290,7 @@ function draw() {
 
    //draw the background circles
   for (let bgCircle of bgCircles) {
+    bgCircle.update();
     bgCircle.display();
   }
 
@@ -322,17 +334,15 @@ function mousePressed() {
     }
   }
 
-  for (let bgCircle of bgCircles) {
-    if (bgCircle.isClicked(mouseX, mouseY)) {
-      bgCircle.changeColor();
-    }
-  }
 }
+
 
 //Lastly resize the canvas only to windowHeight to keep the artwork squared
 
 function windowResized() {
   resizeCanvas(windowHeight, windowHeight);
   circleDiameter = (windowHeight / 20) * 5.5;
+  smallCircleDiameter = windowHeight/90;
+  
   draw();
 }

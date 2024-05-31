@@ -1,28 +1,64 @@
 # 9103_majorProject README file
 IDEA9103 Creative Coding R Smits
-rsmi0219
-540529951
+- rsmi0219
+- 540529951
 
 ## How to interact
-Instructions on how to interact with the work; e.g. move the mouse slowly over the screen, click the play button and wait for the music to start, load the page and the animation will happen over x number of seconds or whatever is needed to make your code come alive.
+**Click on the big circles to change their colour. 
+
+Do you notice anything else by hovering your mouse from one circle to another?
+The background circles change their colours too. How do different colours influence each other? And how do they influence you?**
 
 ## Approach
 
 > User Input
 
-I wanted to ...
+I wanted to create an user interaction where you are able to influence the users perception of the colours of the artwork. I therefore made the colours change, where my groupmembers chose to change the size from the circles, the shapes or their position.
 
-Inspired by ...
+Inspired by Olafur Eliasson, particularly his work ["Room for One Colour"](https://olafureliasson.net/artwork/room-for-one-colour-1997/), I've been playing with the dynamic interplay of turning colors on and off in my artwork. Eliasson's work, known for its immersive exploration of monochromatic light in environments, reveals the influence that colours have on our experiences. By isolating specific hues, Eliasson shows how colours can dominate and influence each other. Looking at colour theory, we know that colours are perceived not in isolation but in relation to each other. This relational perception can significantly influence how we experience an artwork.
+
+I wanted ["this"](https://www.artsy.net/artwork/pacita-abad-wheels-of-fortune) super colourful artwork of to be able to be perceived in different ways. Since also in our research for the group work the bright colours stood out. 
+
+I eventually chose to do this in three ways:
+
+1. Always having random colour combinations for the small dots
+2. Changing the Nested circles in random colours all the time
+3. Clicking the big circles to change their colour
 
 
-References to inspiration for animating your individual code; these can be images (still or gifs). How did they influence your submission?
+To do so I used several online tutorials: 
 
-Which properties of the image will be animated and how; highlighting how it is unique from other group members (i.e. one changes colours, the other component sizes, another reveals only some components at a time, etc.). You will need to work with your group members to make sure your work is sufficiently different from each other.
+Click function for if a Big circle is clicked to change colours:
+  //I used the coding train video for this code:
+  // https://www.youtube.com/watch?v=DEHsr4XicN8&lc=Ugg7r6_9i0CEnHgCoAEC&ab_channel=TheCodingTrain
+
+//for creating an array with colours this tutorial was inspiration:
+  //https://happycoding.io/tutorials/p5js/images/image-palette
+
+ 
+
+
 
 ### Implementation
 
+Background circles: These colours are not animated, but different every time
+Big circles: click to change colours to R,G,B,white or black
+Nested circles: change random colours during framerate
+Small circles: I changed the colors when hovering over the image as also done in my week 10 quiz
 
-A short technical explanation of how your individual code works to animate the image and any appropriate references.
-If you made a lot of changes to the group code, explain it here.
-If you use tools and technique from outside the course, explain why you used them and how they work.
-If you copy a technique from the Internet, explain how it works, why you used it, and where it came from.
+For the big circles I chose the primary colours and black and white to have the most contrast. 
+
+
+Changed the Array of the Nested circles
+//I changed the array here to each individual circle to be able to choose which circle I wanted animated
+& made the other circles white and black for contrast and a bit more tranquility in the whole piece.
+
+
+Needed a lower frameRate because otherwise it was not pleasant to look at 
+  // Set the frameRate lower to have colours changing slower
+  //Framerate derived from https://p5js.org/reference/#/p5/frameRate 
+
+
+
+  The getPaletteColor function is designed to find the closest color from a predefined palette to a given color. However eventually I chose that I wanted to be able to just switch between the different RGB and black & white, so I used the palette just as a way to acces this array of colours.
+
