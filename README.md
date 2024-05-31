@@ -28,12 +28,12 @@ I eventually chose to do this in three ways:
 
 To do so I used several online tutorials: 
 
-Click function for if a Big circle is clicked to change colours:
-  //I used the coding train video for this code:
-  // https://www.youtube.com/watch?v=DEHsr4XicN8&lc=Ugg7r6_9i0CEnHgCoAEC&ab_channel=TheCodingTrain
+>Click function for if a Big circle is clicked to change colours:
+    I used the coding train video for this code:
+  https://www.youtube.com/watch?v=DEHsr4XicN8&lc=Ugg7r6_9i0CEnHgCoAEC&ab_channel=TheCodingTrain
 
-//for creating an array with colours this tutorial was inspiration:
-  //https://happycoding.io/tutorials/p5js/images/image-palette
+>For creating an array with colours this tutorial was inspiration:
+  https://happycoding.io/tutorials/p5js/images/image-palette
 
  
 
@@ -41,24 +41,24 @@ Click function for if a Big circle is clicked to change colours:
 
 ### Implementation
 
-Background circles: These colours are not animated, but different every time
-Big circles: click to change colours to R,G,B,white or black
-Nested circles: change random colours during framerate
-Small circles: I changed the colors when hovering over the image as also done in my week 10 quiz
+![Result](Images/My%20work.gif)
+
+The colour changes are different for the circles: 
+
+-**Background circles:** These colours are not animated, but different every time
+-**Big circles:** click to change colours to R,G,B,white or black as defined in palette
+-**Nested circles:** change random colours during framerate
+-**Small circles:** I changed the colours when hovering over the image as also done in my week 10 quiz
 
 For the big circles I chose the primary colours and black and white to have the most contrast. 
 
 
-Changed the Array of the Nested circles
-//I changed the array here to each individual circle to be able to choose which circle I wanted animated
-& made the other circles white and black for contrast and a bit more tranquility in the whole piece.
+The getPaletteColor function is designed to find the closest color from a predefined palette to a given color. However eventually I chose that I wanted to be able to just switch between the different RGB and black & white, so I used the palette just as a way to acces this array of colours.
+
+In our group code I changed the array of the Nested circles to each individual circle to be able to choose which circle I wanted animated & made the other circles white and black for contrast and a bit more tranquility in the whole piece.
+
+I also needed a lower frameRate because otherwise it was not pleasant to look at. Therefore I used:
+https://p5js.org/reference/#/p5/frameRate 
 
 
-Needed a lower frameRate because otherwise it was not pleasant to look at 
-  // Set the frameRate lower to have colours changing slower
-  //Framerate derived from https://p5js.org/reference/#/p5/frameRate 
-
-
-
-  The getPaletteColor function is designed to find the closest color from a predefined palette to a given color. However eventually I chose that I wanted to be able to just switch between the different RGB and black & white, so I used the palette just as a way to acces this array of colours.
 
